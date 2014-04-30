@@ -7,8 +7,13 @@ import calendar
 from flask import redirect
 
 from presence_analyzer.main import app
-from presence_analyzer.utils import jsonify, get_data, mean, \
-    group_by_weekday, group_by_weekday_start_end
+from presence_analyzer.utils import (
+    jsonify,
+    get_data,
+    mean,
+    group_by_weekday,
+    group_by_weekday_start_end
+)
 
 import logging
 log = logging.getLogger(__name__)  # pylint: disable-msg=C0103
@@ -82,9 +87,13 @@ def presence_start_end_view(user_id):
         return []
 
     weekdays = group_by_weekday_start_end(data[user_id])
-    result = [(calendar.day_abbr[weekday],
-              mean(mean_per_day['start']),
-              mean(mean_per_day['end']))
-              for weekday, mean_per_day in weekdays.items()]
+    result = [
+        (
+            calendar.day_abbr[weekday],
+            mean(mean_per_day['start']),
+            mean(mean_per_day['end']),
+        )
+        for weekday, mean_per_day in weekdays.items()
+    ]
 
     return result
