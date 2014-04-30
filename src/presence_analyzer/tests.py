@@ -75,7 +75,28 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
             ]
         )
 
-    def test_api_pesence_weekday(self):
+    def test_presence_start_end(self):
+        """
+        Testing presence start and end
+        """
+        resp = self.client.get('/api/v1/presence_start_end/10')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertListEqual(
+            data,
+            [
+                [u'Mon', 0, 0],
+                [u'Tue', 34745.0, 64792.0],
+                [u'Wed', 33592.0, 58057.0],
+                [u'Thu', 38926.0, 62631.0],
+                [u'Fri', 0, 0],
+                [u'Sat', 0, 0],
+                [u'Sun', 0, 0],
+            ],
+        )
+
+    def test_api_apesence_weekday(self):
         """
         Test presence weekday.
         """
@@ -125,9 +146,14 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         self.assertItemsEqual(data.keys(), [10, 11])
         sample_date = datetime.date(2013, 9, 10)
         self.assertIn(sample_date, data[10])
-        self.assertItemsEqual(data[10][sample_date].keys(), ['start', 'end'])
-        self.assertEqual(data[10][sample_date]['start'],
-                         datetime.time(9, 39, 5))
+        self.assertItemsEqual(
+            data[10][sample_date].keys(),
+            ['start', 'end']
+        )
+        self.assertEqual(
+            data[10][sample_date]['start'],
+            datetime.time(9, 39, 5)
+        )
 
     def test_group_by_weekday(self):
         """
@@ -144,6 +170,26 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
                 5: [],
                 6: [],
             },
+        )
+
+    def test_group_start_end_weekday(self):
+        """
+        Test weekday grouping start end
+        """
+        data = utils.get_data()
+        weekdays = utils.group_by_weekday_start_end(data[11])
+        self.assertItemsEqual(weekdays.keys(), range(7))
+        self.assertSequenceEqual(
+            weekdays,
+            {
+                0: {'start': [33134], 'end': [57257]},
+                1: {'start': [33590], 'end': [50154]},
+                2: {'start': [33206], 'end': [58527]},
+                3: {'start': [37116, 34088], 'end': [60085, 57087]},
+                4: {'start': [47816], 'end': [54242]},
+                5: {'start': [], 'end': []},
+                6: {'start': [], 'end': []},
+            }
         )
 
     def test_seconds_since_midnight(self):
