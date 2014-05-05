@@ -4,7 +4,7 @@ Defines views.
 """
 
 import calendar
-from flask import redirect
+from flask import render_template, make_response
 
 from presence_analyzer.main import app
 from presence_analyzer.utils import (
@@ -20,11 +20,15 @@ log = logging.getLogger(__name__)  # pylint: disable-msg=C0103
 
 
 @app.route('/')
-def mainpage():
+@app.route('/<string:template_name>', methods=['GET'])
+def templateview(template_name='/site_base'):
     """
-    Redirects to front page.
+    Render templates make response when page doesn't exist
     """
-    return redirect('/static/presence_weekday.html')
+    try:
+        return render_template('/'+template_name+'.html')
+    except:
+        return make_response(u'Page does not exist', 404)
 
 
 @app.route('/api/v1/users', methods=['GET'])

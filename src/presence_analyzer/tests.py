@@ -39,8 +39,19 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         Test main page redirect.
         """
         resp = self.client.get('/')
-        self.assertEqual(resp.status_code, 302)
-        assert resp.headers['Location'].endswith('/presence_weekday.html')
+        self.assertEqual(resp.status_code, 200)
+
+    def templateview_test(self):
+        """
+        Test template view
+        """
+        resp = self.client.get('/presence_weekday')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("Presence mean time by weekday", resp.data)
+
+        resp = self.client.get('/abc')
+        self.assertEqual(resp.status_code, 404)
+        self.assertIn("Page does not exist", resp.data)
 
     def test_api_users(self):
         """
