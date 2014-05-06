@@ -5,6 +5,7 @@ Defines views.
 
 import calendar
 from flask import render_template, make_response
+from jinja2 import TemplateNotFound
 
 from presence_analyzer.main import app
 from presence_analyzer.utils import (
@@ -35,8 +36,8 @@ def templateview(template_name='presence_weekday'):
         if template_name in AVAILABLE_TEMPLATES:
             return render_template('/'+template_name+'.html')
         else:
-            raise KeyError
-    except KeyError:
+            raise TemplateNotFound(template_name)
+    except TemplateNotFound:
         return make_response('Page does not exist', 404)
 
 
