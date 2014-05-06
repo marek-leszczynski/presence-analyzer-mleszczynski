@@ -25,10 +25,10 @@ def templateview(template_name='/site_base'):
     """
     Render templates make response when page doesn't exist
     """
-    try:
-        return render_template('/'+template_name+'.html')
-    except:
-        return make_response(u'Page does not exist', 404)
+    #try:
+    return render_template('/'+template_name+'.html')
+    #except:
+     #   return make_response('Page does not exist', 404)
 
 
 @app.route('/api/v1/users', methods=['GET'])
@@ -42,9 +42,10 @@ def users_view():
             for i in data.keys()]
 
 
+@app.route('/api/v1/mean_time_weekday/', methods=['GET'])
 @app.route('/api/v1/mean_time_weekday/<int:user_id>', methods=['GET'])
 @jsonify
-def mean_time_weekday_view(user_id):
+def mean_time_weekday_view(user_id=None):
     """
     Returns mean presence time of given user grouped by weekday.
     """
@@ -60,9 +61,10 @@ def mean_time_weekday_view(user_id):
     return result
 
 
+@app.route('/api/v1/presence_weekday/', methods=['GET'])
 @app.route('/api/v1/presence_weekday/<int:user_id>', methods=['GET'])
 @jsonify
-def presence_weekday_view(user_id):
+def presence_weekday_view(user_id=None):
     """
     Returns total presence time of given user grouped by weekday.
     """
@@ -79,9 +81,10 @@ def presence_weekday_view(user_id):
     return result
 
 
+@app.route('/api/v1/presence_start_end/', methods=['GET'])
 @app.route('/api/v1/presence_start_end/<int:user_id>', methods=['GET'])
 @jsonify
-def presence_start_end_view(user_id):
+def presence_start_end_view(user_id=None):
     """
     Returns start and end time of given user grouped by weekday.
     """

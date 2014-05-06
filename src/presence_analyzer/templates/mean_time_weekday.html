@@ -22,11 +22,10 @@
                     if(selected_user) {
                         loading.show();
                         chart_div.hide();
-                        $.getJSON("/api/v1/mean_time_weekday/"+selected_user, function(result) {
+                        $.getJSON("{{ url_for('mean_time_weekday_view') }}"+selected_user, function(result) {
                             $.each(result, function(index, value) {
                                 value[1] = parseInterval(value[1]);
                             });
-                            console.log(result);
                             var data = new google.visualization.DataTable();
                             data.addColumn('string', 'Weekday');
                             data.addColumn('datetime', 'Mean time (h:m:s)');

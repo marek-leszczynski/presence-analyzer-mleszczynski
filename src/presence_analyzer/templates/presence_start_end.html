@@ -23,7 +23,7 @@
                         loading.show();
                         chart_div.hide();
 
-                        $.getJSON("/api/v1/presence_start_end/"+selected_user, function(result){
+                        $.getJSON("{{ url_for('presence_start_end_view') }}"+selected_user, function(result){
 
                         if (result.length != 0){
                             $.each(result, function(index, value){
