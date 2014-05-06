@@ -1,0 +1,33 @@
+{% extends  "site_base.html" %}
+{% set active_page = 1 %}
+
+{% block javascript %}
+
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"], 'language': 'en'});
+
+        (function($) {
+            $(document).ready(function(){
+                var loading = $('#loading');
+
+                $('#user_id').change(function(){
+                    var selected_user = $("#user_id").val();
+                    var chart_div = $('#chart_div');
+                    if(selected_user) {
+                        loading.show();
+                        chart_div.hide();
+                        $.getJSON("{{ url_for('presence_weekday_view') }}"+selected_user, function(result) {
+                            var data = google.visualization.arrayToDataTable(result);
+                            var options = {};
+                            chart_div.show();
+                            loading.hide();
+                            var chart = new google.visualization.PieChart(chart_div[0]);
+                            chart.draw(data, options);
+                        });
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
+
+{% endblock %}
