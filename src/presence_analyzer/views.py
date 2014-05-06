@@ -18,16 +18,25 @@ from presence_analyzer.utils import (
 import logging
 log = logging.getLogger(__name__)  # pylint: disable-msg=C0103
 
+AVAILABLE_TEMPLATES = (
+    'mean_time_weekday',
+    'presence_weekday',
+    'presence_start_end',
+)
+
 
 @app.route('/')
 @app.route('/<string:template_name>', methods=['GET'])
-def templateview(template_name='/site_base'):
+def templateview(template_name='presence_weekday'):
     """
     Render templates make response when page doesn't exist
     """
     try:
-        return render_template('/'+template_name+'.html')
-    except:
+        if template_name in AVAILABLE_TEMPLATES:
+            return render_template('/'+template_name+'.html')
+        else:
+            raise KeyError
+    except KeyError:
         return make_response('Page does not exist', 404)
 
 
