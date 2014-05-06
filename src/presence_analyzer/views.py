@@ -25,10 +25,10 @@ def templateview(template_name='/site_base'):
     """
     Render templates make response when page doesn't exist
     """
-    #try:
-    return render_template('/'+template_name+'.html')
-    #except:
-     #   return make_response('Page does not exist', 404)
+    try:
+        return render_template('/'+template_name+'.html')
+    except:
+        return make_response('Page does not exist', 404)
 
 
 @app.route('/api/v1/users', methods=['GET'])
