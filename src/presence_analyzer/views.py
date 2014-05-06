@@ -4,8 +4,9 @@ Defines views.
 """
 
 import calendar
-from flask import render_template, make_response
-from jinja2 import TemplateNotFound
+from flask import make_response
+from flask.ext.mako import render_template
+from mako.exceptions import TopLevelLookupException
 
 from presence_analyzer.main import app
 from presence_analyzer.utils import (
@@ -34,10 +35,10 @@ def templateview(template_name='presence_weekday'):
     """
     try:
         if template_name in AVAILABLE_TEMPLATES:
-            return render_template('/'+template_name+'.html')
+            return render_template(template_name+'.html')
         else:
-            raise TemplateNotFound(template_name)
-    except TemplateNotFound:
+            raise TopLevelLookupException
+    except TopLevelLookupException:
         return make_response('Page does not exist', 404)
 
 

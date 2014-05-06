@@ -1,9 +1,10 @@
-{% set pages = [
-        {'url': url_for('templateview', template_name='presence_weekday'), 'title': 'Presence by weekday', 'id': 1},
-        {'url': url_for('templateview', template_name='mean_time_weekday'), 'title': 'Presence mean time', 'id': 2},
-        {'url': url_for('templateview', template_name= 'presence_start_end'), 'title': 'Presence start-end', 'id': 3}
+<%!
+    pages = [
+        ( url_for('templateview', template_name='presence_weekday'), 'Presence by weekday',  1 ),
+        ( url_for('templateview', template_name='mean_time_weekday'), 'Presence mean time', 2 ),
+        ( url_for('templateview', template_name= 'presence_start_end'), 'Presence start-end', 3 )
     ]
-%}
+%>
 
 <!doctype html>
 <html lang=en>
@@ -15,27 +16,32 @@
         <meta name="author" content="STX Next sp. z o.o."/>
         <meta name="viewport" content="width=device-width; initial-scale=1.0">
 
-        <link href="{{ url_for('static', filename='css/normalize.css') }}" media="all" rel="stylesheet" type="text/css" />
-        <link href="{{ url_for('static', filename='css/style.css') }}" media="all" rel="stylesheet" type="text/css" />
+        <link href="${ url_for('static', filename='css/normalize.css') }" media="all" rel="stylesheet" type="text/css" />
+        <link href="${ url_for('static', filename='css/style.css') }" media="all" rel="stylesheet" type="text/css" />
 
-        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+        <script src="${ url_for('static', filename='js/jquery.min.js') }"></script>
+        <script src="${ url_for('static', filename='js/scripts.js') }"></script>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-        {%  block javascript %}
-        {% endblock %}
+        <%block name="javascript">
 
+        </%block>
     </head>
 
     <body>
         <div id="main">
             <div id="header">
                 <h1>Presence analyzer</h1>
-
                 <ul>
-                    {% for page in pages %}
-                        <li {% if page.id == active_page %} id="selected"{% endif %}><a href="{{ page.url }}">{{ page.title }}</a></li>
-                    {% endfor %}
+                    % for url, title, id in pages:
+                        % if id == self.attr.active_page:
+                            <li id="selected">
+                        % else:
+                            <li>
+                        % endif
+                        <a href="${ url }">${ title }</a>
+                        </li>
+                    % endfor
                 </ul>
 
             </div>
@@ -48,7 +54,7 @@
                     <div id="chart_div" style="display: none">
                     </div>
                     <div id="loading">
-                        <img src="{{ url_for('static', filename='img/loading.gif') }}" />
+                        <img src="${ url_for('static', filename='img/loading.gif') }" />
                     </div>
                 </p>
             </div>

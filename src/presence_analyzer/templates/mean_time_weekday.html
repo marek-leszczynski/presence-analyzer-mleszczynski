@@ -1,7 +1,7 @@
-{% extends  "site_base.html" %}
-{% set active_page = 2 %}
+<%inherit  file="site_base.html" />
+<%! active_page = 2 %>
 
-{% block javascript %}
+<%block name="javascript">
     <script type="text/javascript">
         google.load("visualization", "1", {packages:["corechart"], 'language': 'pl'});
     </script>
@@ -22,7 +22,7 @@
                     if(selected_user) {
                         loading.show();
                         chart_div.hide();
-                        $.getJSON("{{ url_for('mean_time_weekday_view') }}"+selected_user, function(result) {
+                        $.getJSON("${ url_for('mean_time_weekday_view') }"+selected_user, function(result) {
                             $.each(result, function(index, value) {
                                 value[1] = parseInterval(value[1]);
                             });
@@ -47,4 +47,4 @@
             });
         })(jQuery);
     </script>
-{% endblock %}
+</%block>
