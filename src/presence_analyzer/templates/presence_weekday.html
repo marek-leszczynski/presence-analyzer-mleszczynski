@@ -7,20 +7,38 @@
         google.load("visualization", "1", {packages:["corechart"], 'language': 'en'});
 
         (function($) {
-            $(document).ready(function(){
+           $(document).ready(function(){
                 var loading = $('#loading');
+                var server_url = undefined;
+                var users = [];
+                $.getJSON("/api/v2/users", function(result) {
+                    var dropdown = $("#user_id");
+                    server_url = result.server;
+                    users = result.users;
+                    $.each(users, function(user) {
+                        dropdown.append($("<option />").val(this.id).text(this.name));
+                    });
+                    dropdown.show();
+                    loading.hide();
+                });
 
                 $('#user_id').change(function(){
                     var selected_user = $("#user_id").val();
+                    var user = $.grep(users, function(item){
+                        return item.id == selected_user;
+                    })[0];
                     var chart_div = $('#chart_div');
                     if(selected_user) {
+                        $('img#avatar').hide()
                         loading.show();
                         chart_div.hide();
                         $.getJSON("${ url_for('presence_weekday_view') }"+selected_user, function(result) {
                             var data = google.visualization.arrayToDataTable(result);
                             var options = {};
                             chart_div.show();
+                            $('img#avatar').attr('src', server_url + user.avatar).show();
                             loading.hide();
+
                             var chart = new google.visualization.PieChart(chart_div[0]);
                             chart.draw(data, options);
                         });
