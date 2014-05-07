@@ -1,7 +1,7 @@
-{% extends  "site_base.html" %}
-{% set active_page = 3 %}
+<%inherit  file="site_base.html" />
+<%! active_page = 2 %>
 
-{% block javascript %}
+<%block name="javascript">
     <script type="text/javascript">
         google.load("visualization", "1", {packages:["corechart", "timeline"], 'language': 'pl'});
     </script>
@@ -23,7 +23,7 @@
                         loading.show();
                         chart_div.hide();
 
-                        $.getJSON("{{ url_for('presence_start_end_view') }}"+selected_user, function(result){
+                        $.getJSON("${ url_for('presence_start_end_view') }"+selected_user, function(result){
 
                         if (result.length != 0){
                             $.each(result, function(index, value){
@@ -56,4 +56,4 @@
         })(jQuery);
     </script>
 
-{% endblock %}
+</%block>

@@ -1,7 +1,7 @@
-{% extends  "site_base.html" %}
-{% set active_page = 1 %}
+<%inherit  file="site_base.html" />
+<%! active_page = 1 %>
 
-{% block javascript %}
+<%block name="javascript">
 
     <script type="text/javascript">
         google.load("visualization", "1", {packages:["corechart"], 'language': 'en'});
@@ -16,7 +16,7 @@
                     if(selected_user) {
                         loading.show();
                         chart_div.hide();
-                        $.getJSON("{{ url_for('presence_weekday_view') }}"+selected_user, function(result) {
+                        $.getJSON("${ url_for('presence_weekday_view') }"+selected_user, function(result) {
                             var data = google.visualization.arrayToDataTable(result);
                             var options = {};
                             chart_div.show();
@@ -30,4 +30,4 @@
         })(jQuery);
     </script>
 
-{% endblock %}
+</%block>
