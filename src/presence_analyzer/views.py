@@ -6,6 +6,7 @@ Defines views.
 import calendar
 from flask import make_response
 from flask.ext.mako import render_template
+
 from mako.exceptions import TopLevelLookupException
 
 from presence_analyzer.main import app
