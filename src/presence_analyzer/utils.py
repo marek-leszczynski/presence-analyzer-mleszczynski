@@ -138,7 +138,7 @@ def get_data_from_xml():
             }
             for user in sorted(
                 users,
-                key=lambda element: element.findtext('name'),
+                key=lambda element: unicode(element.findtext('name')),
                 cmp=locale.strcoll,
             )
         ]
