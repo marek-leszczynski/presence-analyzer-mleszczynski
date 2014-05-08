@@ -142,6 +142,7 @@ def get_data_from_xml():
                 cmp=locale.strcoll,
             )
         ]
+        locale.setlocale(locale.LC_ALL, (None, None))
 
         return data
 
