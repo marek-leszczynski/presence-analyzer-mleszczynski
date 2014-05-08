@@ -4,8 +4,11 @@ Helper functions used in views.
 """
 
 import csv
-from lxml import etree
 import urllib2
+
+import time
+import threading
+from lxml import etree
 from json import dumps
 from functools import wraps
 from datetime import datetime
@@ -16,6 +19,9 @@ from presence_analyzer.main import app
 
 import logging
 log = logging.getLogger(__name__)  # pylint: disable-msg=C0103
+
+CACHE = {}
+TIMESTAMPS = {}
 
 
 def jsonify(function):
@@ -29,6 +35,44 @@ def jsonify(function):
     return inner
 
 
+def memoize(key, validity_peroid):
+    """
+    Memorizing decorator. Returning cached data
+    if its validity period is not expired
+    """
+    def _decorating_wrapper(function):
+        @wraps(function)
+        def _caching_wrapper(*args, **kwargs):
+            cache_key = key
+            now = time.time()
+
+            if TIMESTAMPS.get(cache_key, now) > now:
+                return CACHE[cache_key]
+
+            result = function(*args, **kwargs)
+            CACHE[cache_key] = result
+            TIMESTAMPS[cache_key] = now + validity_peroid
+            return result
+        return _caching_wrapper
+    return _decorating_wrapper
+
+
+def locker(function):
+    """
+    Global thread locking decorator.
+    """
+    function.__lock__ = threading.Lock()
+
+    @wraps(function)
+    def _lock_wrapper(*args, **kwargs):
+        with function.__lock__:
+            result = function(*args, **kwargs)
+        return result
+    return _lock_wrapper
+
+
+@locker
+@memoize('get_data', 600)
 def get_data():
     """
     Extracts presence data from CSV file and groups it by user_id.
