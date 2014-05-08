@@ -8,6 +8,8 @@ import urllib2
 
 import time
 import threading
+import locale
+
 from lxml import etree
 from json import dumps
 from functools import wraps
@@ -118,6 +120,7 @@ def get_data_from_xml():
     """
     data = {}
     with open(app.config['DATA_XML'], 'r') as xmlfile:
+        locale.setlocale(locale.LC_ALL, 'pl_PL.UTF-8')
         tree = etree.parse(xmlfile)
         root = tree.getroot()
         config = root[0]
@@ -133,7 +136,11 @@ def get_data_from_xml():
                 u'name': unicode(user.findtext('name')),
                 u'avatar': unicode(user.findtext('avatar'))
             }
-            for user in users
+            for user in sorted(
+                users,
+                key=lambda element: element.findtext('name'),
+                cmp=locale.strcoll,
+            )
         ]
 
         return data
