@@ -14,6 +14,10 @@ TEST_DATA_CSV = os.path.join(
     os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_data.csv'
 )
 
+TEST_DATA_CSV_2= os.path.join(
+    os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_data_2.csv'
+)
+
 TEST_DATA_XML = os.path.join(
     os.path.dirname(__file__),
     '..',
@@ -204,6 +208,19 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             data[10][sample_date]['start'],
             datetime.time(9, 39, 5)
         )
+
+    def test_caching(self):
+        """
+        Check of caching decorator works correctly.
+        """
+        data = utils.get_data()
+        main.app.config.update(
+            {
+                'DATA_CSV': TEST_DATA_CSV_2,
+            }
+        )
+        new_data = utils.get_data()
+        self.assertDictEqual(data, new_data)
 
     def test_get_data_from_xml(self):
         """
