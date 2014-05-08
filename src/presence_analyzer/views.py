@@ -13,6 +13,7 @@ from presence_analyzer.main import app
 from presence_analyzer.utils import (
     jsonify,
     get_data,
+    get_data_from_xml,
     mean,
     group_by_weekday,
     group_by_weekday_start_end
@@ -52,6 +53,15 @@ def users_view():
     data = get_data()
     return [{'user_id': i, 'name': 'User {0}'.format(str(i))}
             for i in data.keys()]
+
+
+@app.route('/api/v2/users', methods=['GET'])
+@jsonify
+def users_from_xml_view():
+    """
+    Users listing from xml for dropdown
+    """
+    return get_data_from_xml()
 
 
 @app.route('/api/v1/mean_time_weekday/', methods=['GET'])

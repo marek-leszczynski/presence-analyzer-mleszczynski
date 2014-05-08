@@ -4,6 +4,8 @@ Helper functions used in views.
 """
 
 import csv
+from lxml import etree
+import urllib2
 from json import dumps
 from functools import wraps
 from datetime import datetime
@@ -64,6 +66,47 @@ def get_data():
             data.setdefault(user_id, {})[date] = {'start': start, 'end': end}
 
     return data
+
+
+def get_data_from_xml():
+    """
+    Extracts personal data and server adress from XML file
+    """
+    data = {}
+    with open(app.config['DATA_XML'], 'r') as xmlfile:
+        tree = etree.parse(xmlfile)
+        root = tree.getroot()
+        config = root[0]
+        server = {
+            u'host': unicode(config.findtext('host')),
+            u'protocol': unicode(config.findtext('protocol')),
+        }
+        data['server'] = "%(protocol)s://%(host)s" % server
+        users = root[1]
+        data['users'] = [
+            {
+                u'id': int(user.attrib['id']),
+                u'name': unicode(user.findtext('name')),
+                u'avatar': unicode(user.findtext('avatar'))
+            }
+            for user in users
+        ]
+
+        return data
+
+
+def get_xml():
+    """
+    Download xml user data file from server and
+    save it  in runtime/data directory.
+    """
+    response = urllib2.urlopen(app.config['XML_URL'])
+    with open(app.config['DATA_XML'], 'wb') as xmlfile:
+        while True:
+            chunk = response.read(16 * 1024)
+            if not chunk:
+                break
+            xmlfile.write(chunk)
 
 
 def group_by_weekday(items):

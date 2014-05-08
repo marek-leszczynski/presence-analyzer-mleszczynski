@@ -50,6 +50,24 @@ def make_shell():
     return locals()
 
 
+# bin/flask-ctl xml
+def make_xml(debug=True):
+    """
+    Download xml user data file from server and
+    save it  in runtime/data directory.
+    """
+    import presence_analyzer
+    app = presence_analyzer.app
+    if debug:
+        config = DEBUG_CFG
+    else:
+        config = DEPLOY_CFG
+    app.config.from_pyfile(abspath(config))
+    app.debug = debug
+    presence_analyzer.utils.get_xml()
+    print "Success"
+
+
 def _serve(action, debug=False, dry_run=False):
     """Build paster command from 'action' and 'debug' flag."""
     if debug:
@@ -81,6 +99,7 @@ def _serve(action, debug=False, dry_run=False):
 # bin/flask-ctl ...
 def run():
     action_shell = werkzeug.script.make_shell(make_shell, make_shell.__doc__)
+    action_xml = make_xml
 
     # bin/flask-ctl serve [fg|start|stop|restart|status]
     def action_serve(action=('a', 'start'), dry_run=False):

@@ -20,7 +20,6 @@
         <link href="${ url_for('static', filename='css/style.css') }" media="all" rel="stylesheet" type="text/css" />
 
         <script src="${ url_for('static', filename='js/jquery.min.js') }"></script>
-        <script src="${ url_for('static', filename='js/scripts.js') }"></script>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
         <%block name="javascript">
@@ -51,6 +50,9 @@
                     <select id="user_id" style="display: none">
                         <option value="">--</option>
                     </select>
+                    <div class='avatar'>
+                        <img id="avatar" src="" >
+                    </div>
                     <div id="chart_div" style="display: none">
                     </div>
                     <div id="loading">
