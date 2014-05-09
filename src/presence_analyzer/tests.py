@@ -14,7 +14,7 @@ TEST_DATA_CSV = os.path.join(
     os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_data.csv'
 )
 
-TEST_DATA_CSV_2= os.path.join(
+TEST_DATA_CSV_2 = os.path.join(
     os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_data_2.csv'
 )
 
