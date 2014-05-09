@@ -120,7 +120,7 @@ def get_data_from_xml():
     """
     data = {}
     with open(app.config['DATA_XML'], 'r') as xmlfile:
-        locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+        locale.setlocale(locale.LC_COLLATE, 'pl_PL.UTF-8')
         tree = etree.parse(xmlfile)
         root = tree.getroot()
         config = root[0]
